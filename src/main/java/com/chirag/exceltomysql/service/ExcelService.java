@@ -27,7 +27,7 @@ public class ExcelService {
     //convert content into list(return list of data)
     public List<List<String>>  readExcel(MultipartFile file) throws IOException {
 
-        Orders orders=new Orders();
+
 
         List<List<String>> lists = new ArrayList<>();
 
@@ -41,14 +41,19 @@ public class ExcelService {
         int tot_col=row.getLastCellNum();
 
         for(int i=1;i<tot_row;i++) {
+            Orders orders=new Orders();
             List<String> l1 = new ArrayList<>();
             Row rows = sheet.getRow(i);
             for (int j = 0; j < tot_col; j++) {
-                if (j == 0) {
-                    Double ans = rows.getCell(j).getNumericCellValue();
-                    orders.setId(ans.toString());
-                    l1.add(ans.toString());
-                } else if (j == 1) {
+////                if (j == 0) {
+////                    Double ans = rows.getCell(j).getNumericCellValue();
+////                    orders.setId(ans.toString());
+////                    l1.add(ans.toString());
+//                }
+                if(j==0){
+                    continue;
+                }
+                 if (j == 1) {
                     orders.setCustomer_name(rows.getCell(j).getStringCellValue());
                     l1.add(rows.getCell(j).getStringCellValue());
                 } else if (j == 2) {
