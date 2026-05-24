@@ -1,20 +1,32 @@
 package com.chirag.exceltomysql.helper;
 
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+
+
 @Component
 public class ExcelHelper {
 
+    @Autowired
+    private LogSaver logSaver;
+
     public boolean Excelcheck(MultipartFile file) {
         if (file == null) {
+            logSaver.setLogs("Uploading" , "File is null");
             return false;
         }
         String fileName = file.getOriginalFilename();
+        String ext = fileName.substring(0,fileName.lastIndexOf("."));
+        if(!ext.equals("orders_data")) {
+            return false;
+        }
         if (file.isEmpty() || !fileName.endsWith("xls") && !fileName.endsWith("xlsx")) {
+            logSaver.setLogs("Uploading" , "File is empty or either not in format");
             return false;
         }
         return true;
@@ -52,11 +64,14 @@ public class ExcelHelper {
                         x++;
                         continue;
                     default:
+                        logSaver.setLogs("Uploading" , "Not match colName: " + val);
                         return false;
                 }
             }
         } catch (IOException e) {
+            logSaver.setLogs("Uploading" , "Not match colName: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
         return true;
     }

@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -25,7 +24,7 @@ public class ExcelService {
 
 
     //convert content into list(return list of data)
-    public List<List<String>>  readExcel(MultipartFile file) throws IOException {
+    public String readExcel(MultipartFile file) throws IOException {
 
 
 
@@ -76,6 +75,6 @@ public class ExcelService {
             lists.add(l1);
             excelRepository.save(orders);
         }
-        return lists;
+        return "Data inserted successfully";
     }
 }

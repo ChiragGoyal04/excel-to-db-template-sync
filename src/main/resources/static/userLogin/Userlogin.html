@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Upload System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Excel Upload System</h1>
+
+    <p class="instruction">
+        Upload an Excel file (.xls or .xlsx).<br>
+        The system will automatically fetch columns
+        and create a table dynamically in the database.
+    </p>
+
+    <form id="uploadForm">
+        <div class="file-box">
+            <input
+                    type="file"
+                    id="excelFile"
+                    accept=".xls,.xlsx"
+                    required
+            >
+        </div>
+
+
+        <button type="submit">
+            Upload File
+        </button>
+
+    </form>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

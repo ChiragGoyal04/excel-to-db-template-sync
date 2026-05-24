@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+        }
+
+        .register-container{
+            width:380px;
+            padding:40px;
+            border-radius:18px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            box-shadow:0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .register-container h2{
+            text-align:center;
+            margin-bottom:25px;
+            color:white;
+            letter-spacing:1px;
+        }
+
+        .input-group{
+            display:flex;
+            flex-direction:column;
+            margin-bottom:20px;
+        }
+
+        .input-group label{
+            color:white;
+            margin-bottom:8px;
+            font-size:14px;
+        }
+
+        .input-group input{
+            padding:12px 15px;
+            border:none;
+            outline:none;
+            border-radius:10px;
+            font-size:15px;
+            background: rgba(255,255,255,0.9);
+            transition:0.3s;
+        }
+
+        .input-group input:focus{
+            background:white;
+            transform:scale(1.02);
+        }
+
+        .register-btn{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:10px;
+            background:#ff4b5c;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+            transition:0.3s;
+            margin-top:10px;
+        }
+
+        .register-btn:hover{
+            background:#ff1e3c;
+            transform:translateY(-2px);
+        }
+
+        .login-link{
+            text-align:center;
+            margin-top:18px;
+        }
+
+        .login-link a{
+            color:#ffffff;
+            text-decoration:none;
+            font-size:14px;
+            transition:0.3s;
+        }
+
+        .login-link a:hover{
+            color:#ffd369;
+            text-decoration:underline;
+        }
+
+        @media(max-width:450px){
+
+            .register-container{
+                width:90%;
+                padding:30px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <h2>Create New Account</h2>
+
+    <form id="registerForm">
+
+        <div class="input-group">
+            <label>Username</label>
+            <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter Username"
+                    required
+            >
+        </div>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter Email"
+                    required
+            >
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter Password"
+                    required
+            >
+        </div>
+
+        <button type="submit" class="register-btn">
+            Register User
+        </button>
+
+    </form>
+
+    <div class="login-link">
+        <a href="index.html">
+            Already have an account? Login
+        </a>
+    </div>
+
+</div>
+
+
+<script>
+
+    document.getElementById("registerForm")
+        .addEventListener("submit", async function(event){
+
+            event.preventDefault();
+
+            const userData = {
+
+                username:
+                document.getElementById("username").value,
+
+                email:
+                document.getElementById("email").value,
+
+                password:
+                document.getElementById("password").value
+            };
+
+            const response = await fetch(
+                "/api/user/register",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(userData)
+                }
+            );
+
+            if(response.ok){
+
+                alert(
+                    "User Registered Successfully. Please Login."
+                );
+
+                window.location.href = "index.html";
+            }
+
+            else{
+
+                const errorText = await response.text();
+
+                alert(errorText);
+            }
+
+        });
+</script>
+
+</body>
+</html>

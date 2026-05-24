@@ -1,41 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excel Upload System</title>
-    <link rel="stylesheet" href="style.css">
+    <title>UserDashboard</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+        }
+
+        /* Login Box */
+        .login-box {
+            width: 350px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #head2 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: black;
+        }
+
+        /* Form */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Input Container */
+        .user-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Input Fields */
+        .user-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: 0.3s;
+        }
+
+        .user-box input:focus {
+            background: white;
+            transform: scale(1.02);
+        }
+
+        /* Button */
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #ff4b5c;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #ff1e3c;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .login-box {
+                width: 90%;
+                padding: 25px;
+            }
+        }
+
+        /* Register Link */
+        .register-link {
+            text-align: center;
+            /* margin-top: px; */
+        }
+
+        .register-link a {
+            color: blue;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .register-link a:hover {
+            color: #ffd369;
+            text-decoration: underline;
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container">
 
-    <h1>Excel Upload System</h1>
-
-    <p class="instruction">
-        Upload an Excel file (.xls or .xlsx).<br>
-        The system will automatically fetch columns
-        and add data in the respective template table.
-    </p>
-
-    <form id="uploadForm">
-
-        <input
-                type="file"
-                id="excelFile"
-                accept=".xls,.xlsx"
-                required
-        >
-
-        <button type="submit">
-            Upload File
-        </button>
-
+<div class="login-box">
+    <h2 id="head2"> User Login Dashboard </h2>
+    <form class="login-form" method="POST" action="/api/user/login" autocomplete="off">
+        <div class="user-box">
+            <input type="text" id="username" name="random_username" placeholder="Enter username" autocomplete="off" required>
+            <input type="password" id="password" name="random_password" placeholder="Enter password"  autocomplete="new-password" required>
+            <button type="submit" class="btn">Login</button>
+            <div class="register-link">
+                <a href="registerUser.html">New User? Register Here</a>
+            </div>
+        </div>
     </form>
-    <div id="result"></div>
+
 </div>
 
-<script src="app.js"></script>
+<script>
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const error = params.get("error");
+
+    if(error === "invalid") {
+
+        alert("Invalid Username or Password");
+    }
+
+    if(error === "notexist") {
+
+        alert("User does not exist. Register first.");
+    }
+
+</script>
 
 </body>
+
 </html>

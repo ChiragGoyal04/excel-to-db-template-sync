@@ -1,7 +1,10 @@
 package com.chirag.exceltomysql.controller;
 
 
+import com.chirag.exceltomysql.entity.Orders;
 import com.chirag.exceltomysql.helper.ExcelHelper;
+import com.chirag.exceltomysql.helper.LogSaver;
+import com.chirag.exceltomysql.repository.ExcelRepository;
 import com.chirag.exceltomysql.service.ExcelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,31 +25,36 @@ public class ExcelController {
     @Autowired
     private ExcelService excelService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<List<List<String>>> upload(@RequestParam("file") MultipartFile file) throws IOException {
+    @Autowired
+    private ExcelRepository  excelRepository;
+
+    @Autowired
+    private LogSaver logSaver;
+
+    @PostMapping("/excel/upload")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
         if(excelHelper.Excelcheck(file)) {
             try {
                 boolean karnaHai = excelHelper.matchColName(file);
                 if(karnaHai) {
-                    List<List<String>> li =excelService.readExcel(file);
-                    return ResponseEntity.ok().body(li);
+                    String li =excelService.readExcel(file);
+                    logSaver.setLogs("Uploaded ",li);
+                    return ResponseEntity.ok().body( "✔ Data Inserted Successfully");
                 }
-                    return ResponseEntity.badRequest().build();
+                    return ResponseEntity.badRequest().body("Columns not matched");
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logSaver.setLogs("Error in Uploading : ", e.getMessage());
+                return ResponseEntity.badRequest().body(e.getMessage());
             }
-            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        logSaver.setLogs("Upload Request : ","File name is invalid : "+file.getOriginalFilename());
+        return ResponseEntity.badRequest().body("File name is invalid");
     }
 
-    @GetMapping("/read")
-    public ResponseEntity<List<List<String>>> readExcel(@RequestParam("file") MultipartFile file) throws IOException {
-        if(excelHelper.Excelcheck(file)) {
-            List<List<String>> l1 = new ArrayList<>();
+    @GetMapping("/excel/read")
+    public ResponseEntity<List<Orders>> readExcel() throws IOException {
+        List<Orders> l1=excelRepository.findAll();
             return ResponseEntity.ok().body(l1);
-        }
-        return ResponseEntity.badRequest().build();
     }
 }
