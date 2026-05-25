@@ -3,38 +3,69 @@ document.getElementById("uploadForm")
 
         event.preventDefault();
 
-        const fileInput = document.getElementById("excelFile");
+        const templateSelect =
+            document.getElementById("templateSelect");
 
-            // const message =
-            //     document.getElementById("message");
+        const fileInput =
+            document.getElementById("excelFile");
 
-        if (fileInput.files.length === 0) {
-            alert("Please select an Excel file.");
+        // Template Validation
+
+        if (templateSelect.value === "" || templateSelect.value === "Choose a template") {
+
+            alert("Please select a template.");
+
             return;
         }
+
+        // File Validation
+
+        if (fileInput.files.length === 0) {
+
+            alert("Please select an Excel file.");
+
+            return;
+        }
+
         const formData = new FormData();
 
-        formData.append("file", fileInput.files[0]);
+        // Send Template Name
+
+        formData.append(
+            "template",
+            templateSelect.value
+        );
+
+        // Send File
+
+        formData.append(
+            "file",
+            fileInput.files[0]
+        );
+
         try {
-            const response = await fetch("/api/excel/upload", {
 
-                method: "POST",
-                body: formData
+            const response =
+                await fetch("/api/temp/excel", {
 
-            });
+                    method: "POST",
 
-            const result = await response.text();
+                    body: formData
+                });
 
-           alert(result);
+            const result =
+                await response.text();
+
+            alert(result);
 
         } catch (error) {
 
             console.log(error);
+
             alert("❌ Server Error!");
         }
 
-    }
-    );
+    });
 
 // function showSuccess(text){
 //

@@ -1,9 +1,8 @@
 package com.chirag.exceltomysql.service;
 
 import com.chirag.exceltomysql.entity.Orders;
-import com.chirag.exceltomysql.helper.ExcelHelper;
 
-import com.chirag.exceltomysql.repository.ExcelRepository;
+import com.chirag.exceltomysql.repository.OrderRepository;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,21 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ExcelService {
+public class OrderExcelService {
 
     @Autowired
-    private ExcelHelper excelHelper;
-
-    @Autowired
-    private ExcelRepository excelRepository;
+    private OrderRepository orderRepository;
 
 
     //convert content into list(return list of data)
-    public String readExcel(MultipartFile file) throws IOException {
+    public void fillOrderExcel(MultipartFile file) throws IOException {
 
-
-
-        List<List<String>> lists = new ArrayList<>();
 
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
@@ -41,40 +34,31 @@ public class ExcelService {
 
         for(int i=1;i<tot_row;i++) {
             Orders orders=new Orders();
-            List<String> l1 = new ArrayList<>();
             Row rows = sheet.getRow(i);
             for (int j = 0; j < tot_col; j++) {
-////                if (j == 0) {
-////                    Double ans = rows.getCell(j).getNumericCellValue();
-////                    orders.setId(ans.toString());
-////                    l1.add(ans.toString());
-//                }
                 if(j==0){
-                    continue;
+                Double ans=rows.getCell(j).getNumericCellValue();
+                Long res=Math.round(ans);
+                orders.setOrder_id(res);
                 }
                  if (j == 1) {
                     orders.setCustomer_name(rows.getCell(j).getStringCellValue());
-                    l1.add(rows.getCell(j).getStringCellValue());
                 } else if (j == 2) {
                     orders.setProduct(rows.getCell(j).getStringCellValue());
-                    l1.add(rows.getCell(j).getStringCellValue());
                 } else if (j == 3) {
                     Double ans = rows.getCell(j).getNumericCellValue();
-                    orders.setQuantity(ans.toString());
-                    l1.add(ans.toString());
+                    Integer res= (int) Math.round(ans);
+                    orders.setQuantity(res.toString());
                 } else if (j == 4) {
                     Double ans = rows.getCell(j).getNumericCellValue();
-                    orders.setTotal_Amount(ans.toString());
-                    l1.add(ans.toString());
+                     Integer res= (int) Math.round(ans);
+                    orders.setTotal_Amount(res.toString());
                 } else if (j == 5) {
                     String value = formatter.formatCellValue(rows.getCell(j));
                     orders.setOrder_date(value);
-                    l1.add(value);
                 }
             }
-            lists.add(l1);
-            excelRepository.save(orders);
+            orderRepository.save(orders);
         }
-        return "Data inserted successfully";
     }
 }

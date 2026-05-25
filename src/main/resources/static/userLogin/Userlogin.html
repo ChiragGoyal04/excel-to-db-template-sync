@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<button id="logout" onclick="window.location.href='/index.html'">
+    LogOut
+</button>
 
 <div class="container">
 
@@ -19,15 +22,55 @@
     </p>
 
     <form id="uploadForm">
+
+        <!-- Template Dropdown -->
+        <div class="select-box">
+
+            <label for="templateSelect">
+                Select Template
+            </label>
+
+            <select id="templateSelect" required>
+
+                <option value="">
+                    Choose a template
+                </option>
+
+                <option value="orders">
+                    Orders Template
+                </option>
+
+                <option value="products">
+                    Products Template
+                </option>
+
+<!--                <option value="inventory">-->
+<!--                    Inventory Template-->
+<!--                </option>-->
+
+<!--                <option value="customer">-->
+<!--                    Customer Template-->
+<!--                </option>-->
+
+            </select>
+
+        </div>
+
+        <!-- File Upload -->
         <div class="file-box">
+
+            <label for="excelFile">
+                Choose Excel File
+            </label>
+
             <input
                     type="file"
                     id="excelFile"
                     accept=".xls,.xlsx"
                     required
             >
-        </div>
 
+        </div>
 
         <button type="submit">
             Upload File

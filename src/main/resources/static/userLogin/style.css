@@ -1,111 +1,192 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
-body{
-    height: 100vh;
+body {
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    background: linear-gradient(
-            135deg,
-            #1d2671,
-            #c33764
-    );
+    background: linear-gradient(135deg, #1d2671, #c33764);
+    padding: 40px;
 }
 
-.container{
+#logout {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: auto;
+    padding: 10px 20px;
+    background-color: #ff4b5c;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 75, 92, 0.2);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
 
-    width: 420px;
+#logout:hover {
+    background-color: #ff1e3c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 75, 92, 0.4);
+}
 
-    background: rgba(255,255,255,0.12);
+#logout:active {
+    transform: translateY(0);
+}
 
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-
-    padding: 35px;
-
-    border-radius: 18px;
-
+    -webkit-backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 15px;
     text-align: center;
-
-    box-shadow:
-            0 8px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 20px;
 }
 
-h1{
+h1 {
+    margin-bottom: 15px;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+}
 
-    margin-bottom: 18px;
+.instruction {
+    font-size: 14px;
+    color: #e0e0e0;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+/* Dropdown Section */
+
+.select-box{
+
+    margin-bottom: 20px;
+
+    text-align: left;
+}
+
+.select-box label,
+.file-box label{
+
+    display: block;
+
+    margin-bottom: 8px;
 
     color: white;
 
-    /* font-size: 42px; */
+    font-size: 15px;
 
     font-weight: bold;
 }
 
-.instruction{
+/* Dropdown */
 
-    font-size: 15px;
-
-    color: #f1f1f1;
-
-    margin-bottom: 25px;
-
-    line-height: 1.7;
-}
-
-input[type="file"]{
-
-    width: 100%;
-
-    margin-bottom: 22px;
-
-    padding: 12px;
-
-    border: 1px solid rgba(255,255,255,0.3);
-
-    border-radius: 10px;
-
-    background: rgba(255,255,255,0.1);
-
-    color: white;
-
-    cursor: pointer;
-}
-
-button{
+select{
 
     width: 100%;
 
     padding: 14px;
 
-    border: none;
+    border-radius: 10px;
 
-    background: #ff4b5c;
+    border: 1px solid rgba(255,255,255,0.3);
+
+    background: rgba(255,255,255,0.1);
 
     color: white;
 
-    font-size: 17px;
+    font-size: 15px;
 
-    font-weight: bold;
-
-    border-radius: 10px;
+    outline: none;
 
     cursor: pointer;
 
+    backdrop-filter: blur(10px);
+}
+
+/* Dropdown Options */
+
+select option{
+
+    background: #5b3c77;
+
+    color: white;
+}
+
+/* File Box */
+
+.file-box{
+
+    margin-bottom: 20px;
+
+    text-align: left;
+}
+
+#uploadForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.9);
     transition: 0.3s;
+    cursor: pointer;
 }
 
-button:hover{
+input[type="file"]:focus {
+    background: white;
+    transform: scale(1.02);
+}
 
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #ff4b5c;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(255, 75, 92, 0.2);
+}
+
+button:hover {
     background: #ff1e3c;
-
     transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 75, 92, 0.4);
 }
+
+/*button:active {*/
+/*    transform: translateY(0);*/
+/*}*/
 
 /*#message{*/
 

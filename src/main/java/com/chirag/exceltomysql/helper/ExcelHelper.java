@@ -21,10 +21,10 @@ public class ExcelHelper {
             return false;
         }
         String fileName = file.getOriginalFilename();
-        String ext = fileName.substring(0,fileName.lastIndexOf("."));
-        if(!ext.equals("orders_data")) {
-            return false;
-        }
+//        String ext = fileName.substring(0,fileName.lastIndexOf("."));
+//        if(!ext.equals("orders_data")) {
+//            return false;
+//        }
         if (file.isEmpty() || !fileName.endsWith("xls") && !fileName.endsWith("xlsx")) {
             logSaver.setLogs("Uploading" , "File is empty or either not in format");
             return false;
@@ -32,13 +32,17 @@ public class ExcelHelper {
         return true;
     }
 
-    public boolean matchColName(MultipartFile file) throws IOException {
+
+    public boolean matchOrderColName(MultipartFile file) throws IOException {
+        String fileName=file.getOriginalFilename();
+        String orgName=fileName.substring(0, fileName.lastIndexOf("."));
+
         try {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
             Row row = sheet.getRow(0);
 
-            int colNums = row.getFirstCellNum();
+            int colNums = row.getLastCellNum();
             int x = 0;
             while (x < colNums) {
                 Cell cell = row.getCell(x);
@@ -48,7 +52,7 @@ public class ExcelHelper {
                     case "Order_ID":
                         x++;
                         continue;
-                    case "Customer_name":
+                    case "Customer_Name":
                         x++;
                         continue;
                     case "Product":
@@ -64,15 +68,64 @@ public class ExcelHelper {
                         x++;
                         continue;
                     default:
-                        logSaver.setLogs("Uploading" , "Not match colName: " + val);
+                        logSaver.setLogs("Uploading : " + orgName , "Not match colName: " + val);
                         return false;
                 }
             }
         } catch (IOException e) {
-            logSaver.setLogs("Uploading" , "Not match colName: " + e.getMessage());
+            logSaver.setLogs("Uploading : " +orgName, "Not match colName: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
         return true;
     }
+
+
+    public boolean matchProductColName(MultipartFile file) throws IOException {
+        String fileName=file.getOriginalFilename();
+        String orgName=fileName.substring(0, fileName.lastIndexOf("."));
+
+        try {
+            Workbook workbook = WorkbookFactory.create(file.getInputStream());
+            Sheet sheet = workbook.getSheetAt(0);
+            Row row = sheet.getRow(0);
+
+            int colNums = row.getLastCellNum();
+            int x = 0;
+            while (x < colNums) {
+                Cell cell = row.getCell(x);
+                String val = cell.getStringCellValue();
+
+                switch (val) {
+                    case "Product_ID":
+                        x++;
+                        continue;
+                    case "Product_Name":
+                        x++;
+                        continue;
+                    case "Category":
+                        x++;
+                        continue;
+                    case "Price":
+                        x++;
+                        continue;
+                    case "Stock":
+                        x++;
+                        continue;
+                    case "Supplier":
+                        x++;
+                        continue;
+                    default:
+                        logSaver.setLogs("Uploading : "+orgName , "Not match colName: " + val);
+                        return false;
+                }
+            }
+        } catch (IOException e) {
+            logSaver.setLogs("Uploading : "+orgName , "Not match colName: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 }
