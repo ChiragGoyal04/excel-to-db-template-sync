@@ -1,6 +1,7 @@
 package com.chirag.exceltomysql.controller;
 
 import com.chirag.exceltomysql.entity.Users;
+import com.chirag.exceltomysql.helper.LogSaver;
 import com.chirag.exceltomysql.repository.UserRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,16 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private LogSaver logSaver;
+
     @PostMapping("/user/register")
     public String registerUser(@Valid @RequestBody Users user) {
         user.setUsername(user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEmail(user.getEmail());
         userRepo.save(user);
+        logSaver.setLogs("New user registration","Username : "+user.getUsername()+"\nEmail : "+user.getEmail());
         return "User registered successfully";
     }
 
