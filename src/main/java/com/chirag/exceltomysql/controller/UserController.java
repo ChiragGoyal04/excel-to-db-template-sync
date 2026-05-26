@@ -24,6 +24,9 @@ public class UserController {
 
     @PostMapping("/user/register")
     public String registerUser(@Valid @RequestBody Users user) {
+        if(userRepo.existsByUsername(user.getUsername())){
+            return "Username is already in use";
+        }
         user.setUsername(user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEmail(user.getEmail());

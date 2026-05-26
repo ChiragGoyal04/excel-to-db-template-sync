@@ -13,11 +13,40 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for testing REST APIs
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+            throws Exception {
+
+        http.csrf(csrf -> csrf.disable())
+
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // Allow all incoming requests
+
+                        // allow login page
+                        .requestMatchers(
+                                "/index.html",
+                                "/userLogin/**",
+                                "/registerUser.html",
+                                "/api/user/register"
+                        ).permitAll()
+
+                        // secure everything else
+                        .anyRequest().authenticated()
+                )
+
+                .formLogin(form -> form
+
+                        // your custom page
+                        .loginPage("/index.html")
+
+                        // form submits here
+                        .loginProcessingUrl("/login")
+
+                        // after successful login
+                        .defaultSuccessUrl("/home", true)
+
+                        // if login fails
+                        .failureUrl("/index.html?error=invalid")
+
+                        .permitAll()
                 );
 
         return http.build();
