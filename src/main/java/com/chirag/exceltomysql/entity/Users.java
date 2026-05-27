@@ -30,9 +30,10 @@ public class Users {
     private String email;
 
 //    @Length(min=6, max=15 ,message = "Password length must be between 6 to 15 character")
+    @Column(unique = true)
     private String password;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt=LocalDateTime.now();
 
 }

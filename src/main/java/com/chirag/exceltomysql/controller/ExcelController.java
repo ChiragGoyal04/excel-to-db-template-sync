@@ -2,9 +2,11 @@ package com.chirag.exceltomysql.controller;
 
 
 import com.chirag.exceltomysql.entity.Orders;
+import com.chirag.exceltomysql.entity.Products;
 import com.chirag.exceltomysql.helper.ExcelHelper;
 import com.chirag.exceltomysql.helper.LogSaver;
 import com.chirag.exceltomysql.repository.OrderRepository;
+import com.chirag.exceltomysql.repository.ProductRepository;
 import com.chirag.exceltomysql.service.OrderExcelService;
 import com.chirag.exceltomysql.service.ProductExcelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,6 +34,9 @@ public class ExcelController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private LogSaver logSaver;
@@ -90,9 +96,19 @@ public class ExcelController {
 //        return ResponseEntity.badRequest().body("File name is invalid");
 //    }
 
-    @GetMapping("/excel/read")
-    public ResponseEntity<List<Orders>> readExcel() throws IOException {
-        List<Orders> l1= orderRepository.findAll();
+    @GetMapping("/excel/read/{name}")
+    public ResponseEntity<List<?>> readExcel(@PathVariable String name) throws IOException {
+        if(name==null) {
+            return ResponseEntity.badRequest().body(new ArrayList<>());
+        }
+        if(name.equals("orders")) {
+            List<Orders> l1= orderRepository.findAll();
             return ResponseEntity.ok().body(l1);
+        }
+        else if(name.equals("products")) {
+            List<Products> l1= productRepository.findAll();
+            return ResponseEntity.ok().body(l1);
+        }
+        return ResponseEntity.badRequest().body(new ArrayList<>());
     }
 }

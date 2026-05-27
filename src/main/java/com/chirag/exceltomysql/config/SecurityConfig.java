@@ -25,7 +25,8 @@ public class SecurityConfig {
                                 "/index.html",
                                 "/userLogin/**",
                                 "/registerUser.html",
-                                "/api/user/register"
+                                "/api/user/register",
+                                "/api/excel/read/{template}"
                         ).permitAll()
 
                         // secure everything else
