@@ -1,6 +1,7 @@
 package com.chirag.exceltomysql.controller;
 
 import com.chirag.exceltomysql.dto.RegisterUserDto;
+import com.chirag.exceltomysql.entity.Logs;
 import com.chirag.exceltomysql.entity.Users;
 import com.chirag.exceltomysql.helper.LogSaver;
 import com.chirag.exceltomysql.repository.UserRepo;
@@ -39,7 +40,8 @@ public class UserController {
         user.setEmail(registerUserDto.getEmail());
         userRepo.save(user);
 
-        logSaver.setLogs("New user registration","Username : "+user.getUsername()+"\nEmail : "+user.getEmail());
+        logSaver.setLogs("New user registration","Username : "+user.getUsername()+"\nEmail : "+user.getEmail(),user);
+
         return "User registered successfully";
     }
 

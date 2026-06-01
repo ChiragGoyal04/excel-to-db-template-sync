@@ -3,10 +3,12 @@ package com.chirag.exceltomysql.controller;
 
 import com.chirag.exceltomysql.entity.Orders;
 import com.chirag.exceltomysql.entity.Products;
+import com.chirag.exceltomysql.entity.Users;
 import com.chirag.exceltomysql.helper.ExcelHelper;
 import com.chirag.exceltomysql.helper.LogSaver;
 import com.chirag.exceltomysql.repository.OrderRepository;
 import com.chirag.exceltomysql.repository.ProductRepository;
+import com.chirag.exceltomysql.repository.UserRepo;
 import com.chirag.exceltomysql.service.OrderExcelService;
 import com.chirag.exceltomysql.service.ProductExcelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,15 +44,19 @@ public class ExcelController {
     @Autowired
     private LogSaver logSaver;
 
+    @Autowired
+    private UserRepo userRepo;
+
     @PostMapping("/temp/excel")
-    public ResponseEntity<String> uploadExcel(@RequestParam("template") String template ,@RequestParam("file") MultipartFile file) throws IOException{
-        if(excelHelper.Excelcheck(file)) {
+    public ResponseEntity<String> uploadExcel(@RequestParam("template") String template , @RequestParam("file") MultipartFile file, Principal principal) throws IOException{
+        Users user= userRepo.findByUsername(principal.getName()).orElseThrow(null);
+        if(excelHelper.Excelcheck(file,user)) {
             try {
                 if (template.equals("orders")) {
-                    boolean karnaHai = excelHelper.matchOrderColName(file);
+                    boolean karnaHai = excelHelper.matchOrderColName(file,user);
                     if(karnaHai) {
                         orderExcelService.fillOrderExcel(file);
-                        logSaver.setLogs("Request to fill Order Template","Data inserted successfully");
+                        logSaver.setLogs("Request to fill Order Template","Data inserted successfully",user);
                         return ResponseEntity.ok().body("Data inserted successfully");
                     }
                     else{
@@ -57,10 +64,10 @@ public class ExcelController {
                     }
                 }
                 else if (template.equals("products")) {
-                    boolean karnaHai = excelHelper.matchProductColName(file);
+                    boolean karnaHai = excelHelper.matchProductColName(file,user);
                     if(karnaHai) {
                         productExcelService.fillProductExcel(file);
-                        logSaver.setLogs("Request to fill Product Template","Data inserted successfully");
+                        logSaver.setLogs("Request to fill Product Template","Data inserted successfully",user);
                         return ResponseEntity.ok().body("Data inserted successfully");
                     }
                     else{
@@ -68,7 +75,7 @@ public class ExcelController {
                     }
                 }
             } catch (Exception e) {
-                logSaver.setLogs("Error in Uploading : ", e.getMessage());
+                logSaver.setLogs("Error in Uploading : ", e.getMessage(),user);
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
         }

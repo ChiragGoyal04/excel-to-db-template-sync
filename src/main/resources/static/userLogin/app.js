@@ -1,3 +1,29 @@
+window.addEventListener(
+    "load",
+    async () => {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/current"
+                );
+
+            const username =
+                await response.text();
+
+            document
+                .getElementById("username")
+                .innerText =
+                "Welcome, " + username;
+
+        } catch (error) {
+
+            console.log(error);
+        }
+    }
+);
+
 document.getElementById("uploadForm")
     .addEventListener("submit", async function (event) {
 

@@ -1,5 +1,7 @@
 package com.chirag.exceltomysql.helper;
 
+import com.chirag.exceltomysql.entity.Users;
+import com.chirag.exceltomysql.repository.UserRepo;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,9 +17,12 @@ public class ExcelHelper {
     @Autowired
     private LogSaver logSaver;
 
-    public boolean Excelcheck(MultipartFile file) {
+    @Autowired
+    private UserRepo userRepo;
+
+    public boolean Excelcheck(MultipartFile file,Users user) {
         if (file == null) {
-            logSaver.setLogs("Uploading" , "File is null");
+            logSaver.setLogs("Uploading" , "File is null",user);
             return false;
         }
         String fileName = file.getOriginalFilename();
@@ -26,14 +31,14 @@ public class ExcelHelper {
 //            return false;
 //        }
         if (file.isEmpty() || !fileName.endsWith("xls") && !fileName.endsWith("xlsx")) {
-            logSaver.setLogs("Uploading" , "File is empty or either not in format");
+            logSaver.setLogs("Uploading" , "File is empty or either not in format",user);
             return false;
         }
         return true;
     }
 
 
-    public boolean matchOrderColName(MultipartFile file) throws IOException {
+    public boolean matchOrderColName(MultipartFile file,Users user) throws IOException {
         String fileName=file.getOriginalFilename();
         String orgName=fileName.substring(0, fileName.lastIndexOf("."));
 
@@ -68,12 +73,12 @@ public class ExcelHelper {
                         x++;
                         continue;
                     default:
-                        logSaver.setLogs("Uploading : " + orgName , "Not match colName: " + val);
+                        logSaver.setLogs("Uploading : " + orgName , "Not match colName: " + val,user);
                         return false;
                 }
             }
         } catch (IOException e) {
-            logSaver.setLogs("Uploading : " +orgName, "Not match colName: " + e.getMessage());
+            logSaver.setLogs("Uploading : " +orgName, "Not match colName: " + e.getMessage(),user);
             e.printStackTrace();
             return false;
         }
@@ -81,7 +86,7 @@ public class ExcelHelper {
     }
 
 
-    public boolean matchProductColName(MultipartFile file) throws IOException {
+    public boolean matchProductColName(MultipartFile file,Users user) throws IOException {
         String fileName=file.getOriginalFilename();
         String orgName=fileName.substring(0, fileName.lastIndexOf("."));
 
@@ -116,12 +121,12 @@ public class ExcelHelper {
                         x++;
                         continue;
                     default:
-                        logSaver.setLogs("Uploading : "+orgName , "Not match colName: " + val);
+                        logSaver.setLogs("Uploading : "+orgName , "Not match colName: " + val,user);
                         return false;
                 }
             }
         } catch (IOException e) {
-            logSaver.setLogs("Uploading : "+orgName , "Not match colName: " + e.getMessage());
+            logSaver.setLogs("Uploading : "+orgName , "Not match colName: " + e.getMessage(),user);
             e.printStackTrace();
             return false;
         }

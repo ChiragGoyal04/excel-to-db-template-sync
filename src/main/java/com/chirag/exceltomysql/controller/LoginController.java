@@ -26,6 +26,7 @@ public class LoginController {
 
     @GetMapping("/home")
     public String homePage() {
+
         return "redirect:/UserLogin/Userlogin.html";
     }
 

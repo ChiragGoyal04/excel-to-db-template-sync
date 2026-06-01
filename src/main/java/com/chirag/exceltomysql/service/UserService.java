@@ -1,6 +1,7 @@
 package com.chirag.exceltomysql.service;
 
 
+import com.chirag.exceltomysql.entity.Logs;
 import com.chirag.exceltomysql.entity.Users;
 import com.chirag.exceltomysql.helper.LogSaver;
 import com.chirag.exceltomysql.repository.UserRepo;
@@ -30,7 +31,8 @@ public class UserService implements UserDetailsService {
                                         "User not found"
                                 ));
 
-        logSaver.setLogs("Logged In","username : "+username);
+        logSaver.setLogs("Logged In","username : "+username,user);
+
         return org.springframework.security.core.userdetails.User
                 .builder()
                 .username(user.getUsername())
