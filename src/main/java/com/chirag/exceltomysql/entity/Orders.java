@@ -13,7 +13,7 @@ import lombok.*;
 public class Orders {
 
     @Id
-    private Long Order_id;
+    private Double Order_id;
 
     private String Customer_name;
     private String Product;

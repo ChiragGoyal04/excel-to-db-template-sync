@@ -39,7 +39,8 @@ public class ProductExcelService {
                 if (j == 0) {
                     Double ans = row1.getCell(j).getNumericCellValue();
                     Long val = Math.round(ans);
-                    product.setProduct_ID(val);
+                    Double temp=(double)val;
+                    product.setProduct_ID(temp);
                 } else if (j == 1) {
                     String ans = row1.getCell(j).getStringCellValue();
                     product.setProduct_Name(ans);

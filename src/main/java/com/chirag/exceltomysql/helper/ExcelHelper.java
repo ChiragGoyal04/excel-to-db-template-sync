@@ -1,7 +1,11 @@
 package com.chirag.exceltomysql.helper;
 
+import com.chirag.exceltomysql.entity.Orders;
+import com.chirag.exceltomysql.entity.Templates;
 import com.chirag.exceltomysql.entity.Users;
+import com.chirag.exceltomysql.repository.TemplatesRepo;
 import com.chirag.exceltomysql.repository.UserRepo;
+import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +23,9 @@ public class ExcelHelper {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private TemplatesRepo templatesRepo;
 
     public boolean Excelcheck(MultipartFile file,Users user) {
         if (file == null) {
@@ -133,4 +140,32 @@ public class ExcelHelper {
         return true;
     }
 
-}
+
+    @Transactional
+    public void fillDataTemplates(MultipartFile file) throws IOException {
+        Workbook workbook = WorkbookFactory.create(file.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
+        Row row = sheet.getRow(0);
+
+        int tot_row = sheet.getLastRowNum() + 1;
+        int tot_col = row.getLastCellNum();
+
+        for (int i = 1; i < tot_row; i++) {
+            Templates tt=new Templates();
+            Row rows = sheet.getRow(i);
+            for (int j = 0; j < tot_col; j++) {
+                if(j==0)
+                    continue;
+                else if(j==1){
+                    String temp_name = rows.getCell(j).getStringCellValue();
+                    tt.setOrgName(temp_name);
+                }
+                else if(j==2){
+                String temp_name = rows.getCell(j).getStringCellValue();
+                tt.setTemplateName(temp_name);
+                }
+            }
+            templatesRepo.save(tt);
+            }
+        }
+    }

@@ -39,7 +39,8 @@ public class OrderExcelService {
                 if(j==0){
                 Double ans=rows.getCell(j).getNumericCellValue();
                 Long res=Math.round(ans);
-                orders.setOrder_id(res);
+                Double temp=(double)res;
+                orders.setOrder_id(temp);
                 }
                  if (j == 1) {
                     orders.setCustomer_name(rows.getCell(j).getStringCellValue());

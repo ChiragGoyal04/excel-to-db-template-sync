@@ -11,6 +11,7 @@ import com.chirag.exceltomysql.repository.ProductRepository;
 import com.chirag.exceltomysql.repository.UserRepo;
 import com.chirag.exceltomysql.service.OrderExcelService;
 import com.chirag.exceltomysql.service.ProductExcelService;
+import jakarta.servlet.annotation.MultipartConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -118,4 +119,16 @@ public class ExcelController {
         }
         return ResponseEntity.badRequest().body(new ArrayList<>());
     }
+
+    @PostMapping("/template")
+    public ResponseEntity<String> getTemp(@RequestParam("file") MultipartFile file) throws IOException {
+        excelHelper.fillDataTemplates(file);
+        return ResponseEntity.ok().body("Data inserted successfully");
+    }
+
+//    @PostMapping("/temp-cols")
+//    public ResponseEntity<String> getTempCols(@RequestParam("file") MultipartFile file) throws Exception{
+//        excelHelper.fillDataTempCols(file);
+//        return ResponseEntity.ok().body("Data inserted successfully");
+//    }
 }

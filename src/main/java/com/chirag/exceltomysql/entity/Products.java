@@ -15,7 +15,7 @@ import lombok.*;
 public class Products {
 
     @Id
-    private Long Product_ID;
+    private Double Product_ID;
 
     private String Product_Name;
     private String Category;
